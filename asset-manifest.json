@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/%7BKIVA-API%7D/static/css/main.e6c13ad2.css",
-    "main.js": "/%7BKIVA-API%7D/static/js/main.3c93fe30.js",
-    "static/js/787.28cb0dcd.chunk.js": "/%7BKIVA-API%7D/static/js/787.28cb0dcd.chunk.js",
-    "index.html": "/%7BKIVA-API%7D/index.html",
-    "main.e6c13ad2.css.map": "/%7BKIVA-API%7D/static/css/main.e6c13ad2.css.map",
-    "main.3c93fe30.js.map": "/%7BKIVA-API%7D/static/js/main.3c93fe30.js.map",
-    "787.28cb0dcd.chunk.js.map": "/%7BKIVA-API%7D/static/js/787.28cb0dcd.chunk.js.map"
+    "main.css": "/KIVA-API/static/css/main.e6c13ad2.css",
+    "main.js": "/KIVA-API/static/js/main.a90d2768.js",
+    "static/js/787.28cb0dcd.chunk.js": "/KIVA-API/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/KIVA-API/index.html",
+    "main.e6c13ad2.css.map": "/KIVA-API/static/css/main.e6c13ad2.css.map",
+    "main.a90d2768.js.map": "/KIVA-API/static/js/main.a90d2768.js.map",
+    "787.28cb0dcd.chunk.js.map": "/KIVA-API/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.3c93fe30.js"
+    "static/js/main.a90d2768.js"
   ]
 }
