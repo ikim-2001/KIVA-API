@@ -1,0 +1,1 @@
+'{ lend { loans(filters: {gender: female, country: ["KE", "US"]}, limit: 10) { totalCount values { name loanAmount image { url(presetSize: small) } activity { name } geocode { country { isoCode name } } lenders(limit: 0) { totalCount } ... on LoanPartner { partnerName } ... on LoanDirect { trusteeName } } } } }'
