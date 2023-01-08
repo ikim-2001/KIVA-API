@@ -1,13 +1,12 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { useState } from 'react';
+import { useState} from 'react';
 
 export default function CountryBox(props) {
   const [activeCountries, setActiveCountries] = useState({
@@ -21,6 +20,7 @@ export default function CountryBox(props) {
 
   const handleChange = (event, nation) => {
     props.onCountryChange(event, nation)
+    setActiveCountries(nation)
   }
 
   return (

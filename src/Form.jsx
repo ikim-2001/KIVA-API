@@ -16,8 +16,7 @@ const FormInput = () => {
     const [gender, setGender] = useState({
       "gender": ""
     });
-    const [country, setCountry] = useState("");
-    const [countLimit, setCountLimit] = useState("");
+    const [countLimit, setCountLimit] = useState(0);
     const [activeCountries, setActiveCountries] = useState({
       "AL": false,
       "BO": false,
@@ -32,14 +31,31 @@ const FormInput = () => {
         ...activeCountries,
         [nation]: event.target.checked,
       });
-      console.log(activeCountries)
     };
 
+    function handleCountChange(event) {
+      setCountLimit(event.target.value)
+    }
 
-    const fetchData = async (gender, country, count_limit) => {
+    useEffect(() => {
+      // Perform operation that depends on the updated value of input here.
+      console.log(gender)
+    }, [gender]);
+
+    useEffect(() => {
+      // Perform operation that depends on the updated value of input here.
+      console.log(activeCountries)
+    }, [activeCountries]);
+
+    useEffect(() => {
+      // Perform operation that depends on the updated value of input here.
+      console.log(countLimit)
+    }, [countLimit]);
+
+    const fetchData = async (gender, activeCountries, countLimit) => {
       try {
-        const graphql_query = parseFormData(gender, country, count_limit)
-        
+        const graphql_query = parseFormData(gender, activeCountries, countLimit)
+        console.log(graphql_query)
         setCount(count+1)
         const res = await fetch('https://api.kivaws.org/graphql', {
           method: 'POST',
@@ -54,8 +70,22 @@ const FormInput = () => {
       }
     };
 
-    function parseFormData(gender, country, count_limit) {
-        let graphql_query = format('{ lend { loans(filters: {gender: {0} country: ["{1}"]}, limit: {2}) { totalCount values { name loanAmount image { url(presetSize: default) } activity { name } geocode { country { isoCode name } } lenders(limit: 0) { totalCount } ... on LoanPartner { partnerName } ... on LoanDirect { trusteeName } } } } }', gender, country, count_limit);
+    function parseFormData(gender, countries, count_limit) {
+      let parsedGender = gender["gender"]
+      let parsedCountries = "["
+      for (const [nation, isActive] of Object.entries(countries)) {
+        if (isActive) {
+          parsedCountries+= (`"${nation}"` + ",")
+        }
+      }
+      parsedCountries += "]"
+      console.log(parsedCountries)
+      console.log(parsedGender)
+      console.log(count_limit)
+
+      
+        let graphql_query = format('{ lend { loans(filters: {gender: {0} country:  {1}}, limit: {2}) { totalCount values { name loanAmount image { url(presetSize: default) } activity { name } geocode { country { isoCode name } } lenders(limit: 0) { totalCount } ... on LoanPartner { partnerName } ... on LoanDirect { trusteeName } } } } }', parsedGender, parsedCountries, count_limit);
+        console.log(graphql_query)
         return graphql_query
     }
   
@@ -98,10 +128,9 @@ const FormInput = () => {
         )
       } 
       let finalGrid = [];
-      for (let j = 0; j < grid.length; j += 4){
-        finalGrid.push(grid.slice(j, j+4))
+      for (let j = 0; j < grid.length; j += 7){
+        finalGrid.push(grid.slice(j, j+7))
       }
-      console.log(finalGrid)
       finalGrid.unshift(<br></br>,
       <br></br>,
       <br></br>,
@@ -115,25 +144,13 @@ const FormInput = () => {
     }, [count]);
     
 
-  const [formData, setFormData] = useState({
-    gender: '',
-    country: '',
-    count_limit: '',
-  });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (event) => {
-    setFormData({
-      ...formData,
-      [event.target.name]: event.target.value,
-    });
-  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    fetchData(formData.gender, formData.country, formData.count_limit)
+    fetchData(gender, activeCountries, countLimit)
     setSubmitted(true);
-
   };
 
   function handleGenderChange(newGender) {
@@ -141,7 +158,6 @@ const FormInput = () => {
       ...gender, 
       ["gender"]: newGender
     })
-    console.log(gender)
   }
 
 
@@ -164,7 +180,7 @@ const FormInput = () => {
       }}>
       <form onSubmit={handleSubmit}>
 
-      <LimitBox></LimitBox>
+      <LimitBox onCountChange={handleCountChange}></LimitBox>
       <br/>
       <GenderBox onGenderChange={handleGenderChange}></GenderBox>
         <br />

@@ -1,5 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 const Infobox = (props) => {
 
@@ -9,8 +15,9 @@ const Infobox = (props) => {
 {transition: "0.3s",
 transform: isHover ? "scale(1.05)" : "scale(1)",
     float: "left",
-    marginLeft: "4%",
-    width: "20%",
+    marginLeft: "2%",
+    width: "10%",
+    marginTop: "3%",
     textAlign: "center",
     alignItems: 'center',
     justifyContent: 'center',}
@@ -24,50 +31,37 @@ transform: isHover ? "scale(1.05)" : "scale(1)",
   };
 
   return (
-    <div 
+    <Card sx={{ maxWidth: 345, maxHeight: 230 }}
     style={boxAttribs}
     onMouseEnter={handleMouseEnter}
-    onMouseLeave={handleMouseLeave}
-    >
-      
-    <a style={{transform: 'translateY(25%)',}}
-    href={props.image_url} target="_blank" rel="noreferrer">
-    <img style={{borderTopLeftRadius:"5%",
-    borderTopRightRadius: "5%", 
-    transform: 'translateY(25%)',
+    onMouseLeave={handleMouseLeave}>
+            <CardMedia
+         sx={{ maxWidth: 345, maxHeight: 500 }}
+        title={props.name}
+      >
+         <img style={{
+          height: "20%",
     zIndex: "-2",
     position: "relative",
-                        width: "100%"}}src={props.image_url}></img>
-      </a>
-    <div style={{
-        }}>
-
-        <div className='box' style={inputStyle}>
-                <div key="count">
-                <p style={{ fontSize: "25px",
-                 fontWeight: "bolder",
-                marginTop: "-1%",
-                    fontFamily: "Poppins, Arial, sans-serif",}}>{props.name} ({props.country})</p>
-                <p style={{ fontFamily: "Poppins, Arial, sans-serif",
-                                marginTop: "-3%",
-                fontSize: "15px",}}>{props.partnerName}</p>
-                <p style={{ fontSize: "15px",
-                                marginTop: "-1%",
-             }}>{props.lenders} Lenders (${props.loanAmount})</p>
-                {/* <p>Activity: {props.activity}</p> */}
-            </div>
-    </div>
-  </div>
-  </div>
+                        width: "100%"}}src={props.image_url}  sx={{ maxWidth: 345, maxHeight: 500 }}></img>
+      <CardActions style={{"marginTop": "-26%"}} sx={{bgcolor:"#fff"}}>
+        <Button style={{"marginTop": "-4%"}} size="small">Share</Button>
+        <a style={{"marginTop": "-4%"}} href='https://www.kiva.org/pgtmp/home'>
+        <Button size="small">More</Button>
+        </a>
+      </CardActions>
+      </CardMedia>
+      <CardContent style={{marginTop: "-20%"}}>
+        <Typography gutterBottom variant="h9" component="div">
+          {props.name} ({props.country})
+        </Typography>
+        <Typography style={{"fontSize": "12px"}} variant="body2" color="text.secondary">
+        {props.lenders} lenders in {props.activity} (${props.loanAmount}) 
+        </Typography>
+      </CardContent>
+  </Card>
   );
 };
 
-const inputStyle = { 
-                  boxShadow: "10px 2px 50px teal",
-          height: "150px",
-          padding: "5%",
-      background: 'linear-gradient(to right, #3EB489, #4299E1)',
-      borderBottomRightRadius:"5%",
-      borderBottomLeftRadius: "5%"}
 
 export default Infobox;
