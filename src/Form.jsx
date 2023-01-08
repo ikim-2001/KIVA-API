@@ -2,10 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import { format } from 'react-string-format';
-import SortButton from './SortButton';
 import GenderBox from './genderBox';
 import CountryBox from './countryBox';
 import LimitBox from './limitBox';
+import Button from '@mui/material/Button';
+import SortButtons from './SortButtons';
 
 
 
@@ -113,6 +114,7 @@ const FormInput = () => {
     useEffect(() => {
       if (response != null) {
       const grid = []
+      grid.push(<SortButtons></SortButtons>)
       for (let i = 0; i < response.length; i ++) {
         const item = response[i]
         grid.push(
@@ -189,20 +191,21 @@ const FormInput = () => {
 
         <br />
         <br></br>
-        <button  style={{
-        backgroundColor: '#DDDDDD',
-        borderRadius: '10%',
-        padding: "5%",
-        alignItems: "center",
-        marginLeft: "28%",
-        fontFamily: "Poppins, Arial, sans-serif",
-        fontSize: "20px",
-        fontWeight: "bolder",
-        cursor: 'pointer',
+            <Button sx={{backgroundColor: "rgb(147, 233, 190)", color: "white"}} variant="contained"
+            style={{
+              borderWidth: "3px",
+              borderColor: "rgb(147, 233, 190)",
+              borderRadius: '10%',
+              alignItems: "center",
+              marginLeft: "28%",
+              fontFamily: "Poppins, Arial, sans-serif",
+              fontSize: "20px",
+              fontWeight: "bolder",
+              cursor: 'pointer'
+            }} 
+            type="submit"
+            variant="outlined">Submit</Button>
 
-      }}
-      
-        type="submit" >Submit</button>
       </form>
     </div>
     {submitted && (

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import FormInput from './Form';
-import SortButton from './SortButton';
 
 const App = () => {
   return (
@@ -10,7 +9,6 @@ const App = () => {
         margin: "auto",
         width: "100%",
         padding: "10px",
-background: 'linear-gradient(to right, #3EB489, #4299E1)',
   height: "200px",
 }}>
   <p style={{
@@ -18,7 +16,13 @@ background: 'linear-gradient(to right, #3EB489, #4299E1)',
     textAlign: "center", 
   fontFamily: "Poppins, Arial, sans-serif",
   fontSize: "50px"}}>KIVA API Project</p>
+    <p style={{
+    fontWeight: "bolder",
+    textAlign: "center", 
+  fontFamily: "Poppins, Arial, sans-serif",
+  fontSize: "30px"}}>Query anything from <a href="https://www.kiva.org/pgtmp/home" target="_blank"><span style={{textDecoration: "none", color: "rgb(147, 233, 190)"}}>KIVA</span></a>!</p>
 </div>
+
       <FormInput></FormInput>
       <div style={{ 
         margin: "auto",
@@ -31,7 +35,6 @@ background: 'linear-gradient(to right, #3EB489, #4299E1)',
   fontFamily: "Maven Pro",
   fontSize: "50px"}}></p>
 </div>
-
     </div>
   );
 };
