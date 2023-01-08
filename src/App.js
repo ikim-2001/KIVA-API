@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import FormInput from './Form';
+import SortButton from './SortButton';
 
 const App = () => {
   return (

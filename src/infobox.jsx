@@ -42,13 +42,7 @@ transform: isHover ? "scale(1.05)" : "scale(1)",
     <div style={{
         }}>
 
-        <div className='box' style={{ 
-                  boxShadow: "10px 2px 50px teal",
-          height: "150px",
-          padding: "5%",
-      background: 'linear-gradient(to right, #3EB489, #4299E1)',
-      borderBottomRightRadius:"5%",
-      borderBottomLeftRadius: "5%"}}>
+        <div className='box' style={inputStyle}>
                 <div key="count">
                 <p style={{ fontSize: "25px",
                  fontWeight: "bolder",
@@ -67,5 +61,13 @@ transform: isHover ? "scale(1.05)" : "scale(1)",
   </div>
   );
 };
+
+const inputStyle = { 
+                  boxShadow: "10px 2px 50px teal",
+          height: "150px",
+          padding: "5%",
+      background: 'linear-gradient(to right, #3EB489, #4299E1)',
+      borderBottomRightRadius:"5%",
+      borderBottomLeftRadius: "5%"}
 
 export default Infobox;

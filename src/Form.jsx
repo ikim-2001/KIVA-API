@@ -2,6 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import { format } from 'react-string-format';
+import SortButton from './SortButton';
+import GenderBox from './genderBox';
+import CountryBox from './countryBox';
+import LimitBox from './limitBox';
 
 
 
@@ -9,9 +13,28 @@ const FormInput = () => {
     const [response, setResponse] = useState(null);
     const [renderedOutput, setRenderedOutput] = useState(null);
     const [count, setCount] = useState(0);
-    const [gender, setGender] = useState(false);
-    const [country, setCountry] = useState(false);
-    const [countLimit, setCountLimit] = useState(false);
+    const [gender, setGender] = useState({
+      "gender": ""
+    });
+    const [country, setCountry] = useState("");
+    const [countLimit, setCountLimit] = useState("");
+    const [activeCountries, setActiveCountries] = useState({
+      "AL": false,
+      "BO": false,
+      "KE": false,
+      "PH": false,
+      "US": false,
+      "VN": false,
+    })
+  
+    const handleActiveCountries = (event, nation) => {
+      setActiveCountries({
+        ...activeCountries,
+        [nation]: event.target.checked,
+      });
+      console.log(activeCountries)
+    };
+
 
     const fetchData = async (gender, country, count_limit) => {
       try {
@@ -79,7 +102,15 @@ const FormInput = () => {
         finalGrid.push(grid.slice(j, j+4))
       }
       console.log(finalGrid)
-      setRenderedOutput(<p>RESULTS </p> && finalGrid)
+      finalGrid.unshift(<br></br>,
+      <br></br>,
+      <br></br>,
+      <br></br>,
+      <br></br>,
+      <br></br>,
+      )
+      setRenderedOutput(
+      <p>RESULTS </p> && finalGrid)
     }
     }, [count]);
     
@@ -105,15 +136,25 @@ const FormInput = () => {
 
   };
 
+  function handleGenderChange(newGender) {
+    setGender({
+      ...gender, 
+      ["gender"]: newGender
+    })
+    console.log(gender)
+  }
+
+
 
 
   return (
     <div>
     <div style={{
-      background: 'linear-gradient(to right, #3EB489, #4299E1)',
-        boxShadow: "10px 2px 50px teal",
-        marginLeft: '33%',
-        marginTop: "3%",
+      borderWidth: "10px",
+      border: '3px solid rgba(147, 233, 190, 1)',
+        left: '50%',
+        transform: 'translate(142%, 0%)',
+                marginTop: "3%",
         width: '20%',
         height: '40%',
         borderRadius: '10%',
@@ -123,93 +164,12 @@ const FormInput = () => {
       }}>
       <form onSubmit={handleSubmit}>
 
-      <label style={{fontFamily: "Poppins, Arial, sans-serif",
-                  fontSize: "25px",
-                  fontWeight: "bolder",
-                  transition: "0.3s",
-                  fontSize: gender ? "23px" :  "20px",
-}}>
-          Gender:
-          <input 
-          
-          onFocus={(e) => {
-            setGender(true)
-        console.log('Focused on Gender');
-      }}
-      onBlur={(e) => {
-        setGender(false)
-        console.log('Lost focus on Gender');
-      }}
-          style={{width: "100%",
-          fontSize: gender ? "25px" :  "20px",
-          marginLeft: "-2.5%",
-          padding: "2%",
-        height: "200%"}}
-            type="text"
-            name="gender"
-            value={formData.gender}
-            onChange={handleChange}
-          />
-        </label>
-
+      <LimitBox></LimitBox>
+      <br/>
+      <GenderBox onGenderChange={handleGenderChange}></GenderBox>
         <br />
-        <label style={{fontFamily: "Poppins, Arial, sans-serif",
-                  fontSize: "25px",
-                  fontWeight: "bolder",
-                  transition: "0.3s",
-                  fontSize: country ? "23px" :  "20px",
-}}>
-          Country:
-          <input 
-          
-          onFocus={(e) => {
-            setCountry(true)
-        console.log('Focused on country');
-      }}
-      onBlur={(e) => {
-        setCountry(false)
-        console.log('Lost focus on country');
-      }}
-          style={{width: "100%",
-          fontSize: gender ? "25px" :  "20px",
-          marginLeft: "-2.5%",
-          padding: "2%",
-        height: "200%"}}
-            type="text"
-            name="country"
-            value={formData.country}
-            onChange={handleChange}
-          />
-        </label>
-
+        <CountryBox onCountryChange={handleActiveCountries}></CountryBox>
         <br />
-
-        <label style={{fontFamily: "Poppins, Arial, sans-serif",
-                  fontSize: "25px",
-                  fontWeight: "bolder",
-                  transition: "0.3s",
-                  fontSize: countLimit ? "23px" :  "20px",
-}}>
-          Count Limit:
-          <input onFocus={(e) => {
-            setCountLimit(true)
-        console.log('Focused on count Limit');
-      }}
-      onBlur={(e) => {
-        setCountLimit(false)
-        console.log('Lost focus on count Limit');
-      }}
-          style={{width: "100%",
-          fontSize: countLimit ? "25px" :  "20px",
-          marginLeft: "-2.5%",
-          padding: "2%",
-        height: "200%"}}
-            type="text"
-            name="count_limit"
-            value={formData.count_limit}
-            onChange={handleChange}
-          />
-        </label>
 
         <br />
         <br></br>
@@ -222,6 +182,8 @@ const FormInput = () => {
         fontFamily: "Poppins, Arial, sans-serif",
         fontSize: "20px",
         fontWeight: "bolder",
+        cursor: 'pointer',
+
       }}
       
         type="submit" >Submit</button>
