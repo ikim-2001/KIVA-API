@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import FormInput from './Form';
+import CountryDropBox from './CountryDropBOx';
 
 const App = () => {
   return (
@@ -22,7 +23,6 @@ const App = () => {
   fontFamily: "Poppins, Arial, sans-serif",
   fontSize: "30px"}}>Query anything from <a href="https://www.kiva.org/pgtmp/home" target="_blank"><span style={{textDecoration: "none", color: "rgb(147, 233, 190)"}}>KIVA</span></a>!</p>
 </div>
-
       <FormInput></FormInput>
       <div style={{ 
         margin: "auto",

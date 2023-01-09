@@ -1,4 +1,4 @@
-// import { render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React, { useState, useEffect } from 'react';
 import Infobox from "../src/infobox"
 import { format } from 'react-string-format';
@@ -7,57 +7,41 @@ import CountryBox from './countryBox';
 import LimitBox from './limitBox';
 import Button from '@mui/material/Button';
 import SortButtons from './SortButtons';
-
+import CountryDropBox from './CountryDropBOx';
+import GenderDropBox from './GenderDropdownBox';
+import sortAlpha from "./sortObjects";
 
 
 const FormInput = () => {
     const [response, setResponse] = useState(null);
     const [renderedOutput, setRenderedOutput] = useState(null);
     const [count, setCount] = useState(0);
+    const [selectedOptions, setSelectedOptions] = useState();
     const [gender, setGender] = useState({
       "gender": ""
     });
     const [countLimit, setCountLimit] = useState(0);
-    const [activeCountries, setActiveCountries] = useState({
-      "AL": false,
-      "BO": false,
-      "KE": false,
-      "PH": false,
-      "US": false,
-      "VN": false,
-    })
-  
-    const handleActiveCountries = (event, nation) => {
-      setActiveCountries({
-        ...activeCountries,
-        [nation]: event.target.checked,
-      });
-    };
+
+
+    const handleActiveCountries = (data) => {
+      setSelectedOptions(data);
+    }
 
     function handleCountChange(event) {
       setCountLimit(event.target.value)
     }
 
-    useEffect(() => {
-      // Perform operation that depends on the updated value of input here.
-      console.log(gender)
-    }, [gender]);
-
-    useEffect(() => {
-      // Perform operation that depends on the updated value of input here.
-      console.log(activeCountries)
-    }, [activeCountries]);
-
-    useEffect(() => {
-      // Perform operation that depends on the updated value of input here.
-      console.log(countLimit)
-    }, [countLimit]);
+    function parseCountries() {
+      let cleanCountries = []
+      for (let i = 0; i < selectedOptions.length; i ++) {
+        cleanCountries.push(selectedOptions[i]["value"])
+      }
+      return cleanCountries
+    }
 
     const fetchData = async (gender, activeCountries, countLimit) => {
       try {
         const graphql_query = parseFormData(gender, activeCountries, countLimit)
-        console.log(graphql_query)
-        setCount(count+1)
         const res = await fetch('https://api.kivaws.org/graphql', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -65,6 +49,7 @@ const FormInput = () => {
         })
         var data = await res.json();
         data = parseJson(data);
+        console.log(data)
         setResponse(data);
       } catch (error) {
         console.error(error);
@@ -74,15 +59,10 @@ const FormInput = () => {
     function parseFormData(gender, countries, count_limit) {
       let parsedGender = gender["gender"]
       let parsedCountries = "["
-      for (const [nation, isActive] of Object.entries(countries)) {
-        if (isActive) {
-          parsedCountries+= (`"${nation}"` + ",")
-        }
+      for (let i = 0; i < countries.length; i++) {
+        parsedCountries+= (`"${countries[i]}"` + ",")
       }
       parsedCountries += "]"
-      console.log(parsedCountries)
-      console.log(parsedGender)
-      console.log(count_limit)
 
       
         let graphql_query = format('{ lend { loans(filters: {gender: {0} country:  {1}}, limit: {2}) { totalCount values { name loanAmount image { url(presetSize: default) } activity { name } geocode { country { isoCode name } } lenders(limit: 0) { totalCount } ... on LoanPartner { partnerName } ... on LoanDirect { trusteeName } } } } }', parsedGender, parsedCountries, count_limit);
@@ -91,7 +71,6 @@ const FormInput = () => {
     }
   
     function parseJson(data) {
-      console.log(data)
       var res = []
       data = data["data"]["lend"]["loans"]["values"];
   
@@ -107,14 +86,47 @@ const FormInput = () => {
         }
         res.push(parsedJson)
       }
-      console.log(res)
       return res
     }
-  
-    useEffect(() => {
-      if (response != null) {
+    
+  const [submitted, setSubmitted] = useState(false);
+
+  function handleNameClick() {
+    console.log(renderedOutput)
+    let unsortedArr = renderedOutput
+    const sortedData = [...unsortedArr].sort((a, b) => {
+      return a["props"]["name"] > b["props"]["name"] ? 1 : -1
+    })
+    setRenderedOutput(sortedData)
+  }
+
+  function handleCountryClick() {
+    console.log(renderedOutput)
+    let unsortedArr = renderedOutput
+    const sortedData = [...unsortedArr].sort((a, b) => {
+      return a["props"]["country"] > b["props"]["country"] ? 1 : -1
+    })
+    setRenderedOutput(sortedData)
+  }
+
+  function handleLendersClick() {
+    console.log(renderedOutput)
+    let unsortedArr = renderedOutput
+    const sortedData = [...unsortedArr].sort((a, b) => {
+      return a["props"]["lenders"] > b["props"]["lenders"] ? 1 : -1
+    })
+    setRenderedOutput(sortedData)
+  }
+
+
+  const handleSubmit = (event) => {
+    // setCount(count+1)
+    event.preventDefault();
+    let cleanCountries = parseCountries();
+    fetchData(gender, cleanCountries, countLimit)
+    setSubmitted(true);
+    if (response != null) {
       const grid = []
-      grid.push(<SortButtons></SortButtons>)
       for (let i = 0; i < response.length; i ++) {
         const item = response[i]
         grid.push(
@@ -129,30 +141,9 @@ const FormInput = () => {
           partnerName={item["partnerName"]}/>
         )
       } 
-      let finalGrid = [];
-      for (let j = 0; j < grid.length; j += 7){
-        finalGrid.push(grid.slice(j, j+7))
-      }
-      finalGrid.unshift(<br></br>,
-      <br></br>,
-      <br></br>,
-      <br></br>,
-      <br></br>,
-      <br></br>,
-      )
       setRenderedOutput(
-      <p>RESULTS </p> && finalGrid)
+      <p name={""}>RESULTS </p> && grid)
     }
-    }, [count]);
-    
-
-  const [submitted, setSubmitted] = useState(false);
-
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    fetchData(gender, activeCountries, countLimit)
-    setSubmitted(true);
   };
 
   function handleGenderChange(newGender) {
@@ -161,7 +152,6 @@ const FormInput = () => {
       ["gender"]: newGender
     })
   }
-
 
 
 
@@ -184,9 +174,9 @@ const FormInput = () => {
 
       <LimitBox onCountChange={handleCountChange}></LimitBox>
       <br/>
-      <GenderBox onGenderChange={handleGenderChange}></GenderBox>
+      <GenderDropBox onGenderChange={handleGenderChange}></GenderDropBox>
         <br />
-        <CountryBox onCountryChange={handleActiveCountries}></CountryBox>
+        <CountryDropBox onCountryChange={handleActiveCountries}></CountryDropBox>
         <br />
 
         <br />
@@ -208,11 +198,10 @@ const FormInput = () => {
 
       </form>
     </div>
-    {submitted && (
-        <div>
+    {(submitted && <SortButtons onNameClicked={handleNameClick}
+                                                    onCountryClicked={handleCountryClick}
+                                                    onLendersClicked={handleLendersClick}></SortButtons>)}
             {renderedOutput}
-        </div>
-      )}
     </div>
   );
 };

@@ -19,7 +19,18 @@ const buttonStyle = {
     alignItems: 'center',
   }
 
-export default function SortButtons() {
+export default function SortButtons(props) {
+  function handleNameClick() {
+    props.onNameClicked()
+  }
+  function handleCountryClick() {
+    props.onCountryClicked()
+  }
+  function handleLendersClick() {
+    props.onLendersClicked()
+  }
+  
+
   return (
     <div id="sort">
     <p style={{
@@ -30,11 +41,11 @@ export default function SortButtons() {
         Sort By:
       </p>
     <Stack style={stackStyles} spacing={4} direction="row">
-      <Button  style={buttonStyle} 
+      <Button  onClick={handleNameClick} style={buttonStyle} 
        sx={{backgroundColor: "rgb(147, 233, 190)", color: "white"}} variant="contained">Name</Button>
-      <Button  style={buttonStyle}
+      <Button onClick={handleCountryClick}  style={buttonStyle}
       sx={{backgroundColor: "rgb(147, 233, 190)", color: "white"}} variant="contained">Loan Value</Button>
-      <Button style={buttonStyle}
+      <Button onClick={handleLendersClick} style={buttonStyle}
        sx={{backgroundColor: "rgb(147, 233, 190)", color: "white"}} variant="contained">Country</Button>
     </Stack>
     </div>
